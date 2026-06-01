@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admission Follow-Up Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-light">
+  <header class="app-header shadow-sm">
+    <div class="container d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 py-4">
+      <div class="header-brand d-flex align-items-center gap-3">
+        <div class="brand-mark d-flex align-items-center justify-content-center"><i class="bi bi-building"></i></div>
+        <div>
+          <p class="text-uppercase small text-muted mb-1">Built by EduGenz</p>
+          <h1 class="h4 mb-0">Admission Follow-Up Tracker</h1>
+        </div>
+      </div>
+      <button id="themeToggle" class="btn btn-outline-primary btn-sm rounded-pill" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-fill"></i> Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main class="container-fluid py-4">
+    <div class="content-wrapper mx-auto" style="max-width:95vw;">
+    <section class="row g-3 mb-4" id="dashboardCards">
+      <div class="col-md-4">
+        <div class="card stat-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="stat-icon bg-primary text-white"><i class="bi bi-envelope-paper"></i></span>
+            <div>
+              <p class="text-muted mb-1">Total Enquiries</p>
+              <h2 id="totalEnquiries" class="mb-0">0</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="stat-icon bg-warning text-white"><i class="bi bi-clock-history"></i></span>
+            <div>
+              <p class="text-muted mb-1">Follow-Ups Pending</p>
+              <h2 id="pendingFollowUps" class="mb-0">0</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card p-4 h-100">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="stat-icon bg-success text-white"><i class="bi bi-check-circle"></i></span>
+            <div>
+              <p class="text-muted mb-1">Admissions Confirmed</p>
+              <h2 id="confirmedAdmissions" class="mb-0">0</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="row g-4">
+      <div class="col-lg-3">
+        <div class="card p-4 shadow-sm h-100">
+          <h2 class="h5 mb-4">New Enquiry</h2>
+          <form id="enquiryForm" novalidate>
+            <input type="hidden" id="enquiryId" />
+            <div class="mb-3">
+              <label for="parentName" class="form-label">Parent Name</label>
+              <input type="text" id="parentName" class="form-control" placeholder="Enter parent name" required />
+            </div>
+            <div class="mb-3">
+              <label for="studentName" class="form-label">Student Name</label>
+              <input type="text" id="studentName" class="form-control" placeholder="Enter student name" required />
+            </div>
+            <div class="mb-3">
+              <label for="mobileNumber" class="form-label">Phone Number</label>
+              <input type="tel" id="mobileNumber" class="form-control" placeholder="Enter phone number" required />
+            </div>
+            <div class="mb-3">
+              <label for="classApplying" class="form-label">Class Applying For</label>
+              <input type="text" id="classApplying" class="form-control" placeholder="Enter class" />
+            </div>
+            <div class="mb-3">
+              <label for="followUpDate" class="form-label">Follow-Up Date</label>
+              <input type="date" id="followUpDate" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="status" class="form-label">Status</label>
+              <select id="status" class="form-select">
+                <option value="New Enquiry">New Enquiry</option>
+                <option value="Follow-Up Pending">Follow-Up Pending</option>
+                <option value="Interested">Interested</option>
+                <option value="Admission Confirmed">Admission Confirmed</option>
+                <option value="Not Interested">Not Interested</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="notes" class="form-label">Notes</label>
+              <textarea id="notes" class="form-control" rows="4" placeholder="Add any additional notes"></textarea>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="reset" class="btn btn-outline-secondary" id="resetForm">Reset</button>
+              <button type="submit" class="btn btn-primary" id="saveEnquiryBtn">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-4">
+              <div>
+                <h2 class="h5 mb-1">Enquiry List</h2>
+                <p class="text-muted mb-0">Manage follow-ups and update admission status.</p>
+              </div>
+              <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input type="search" id="searchInput" class="form-control" placeholder="Search enquiries" />
+                </div>
+                <select id="statusFilter" class="form-select form-select-sm">
+                  <option value="All">All Status</option>
+                  <option value="New Enquiry">New Enquiry</option>
+                  <option value="Follow-Up Pending">Follow-Up Pending</option>
+                  <option value="Interested">Interested</option>
+                  <option value="Admission Confirmed">Admission Confirmed</option>
+                  <option value="Not Interested">Not Interested</option>
+                </select>
+                <button id="exportBtn" type="button" onclick="exportToExcel()" class="btn btn-primary btn-sm">Export All Data</button>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mb-3">
+              <small id="autoSaveIndicator" class="text-success">Data auto-saved locally</small>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-borderless align-middle mb-0" id="enquiryTable">
+                <thead class="table-light rounded-top">
+                  <tr>
+                    <th>Parent</th>
+                    <th>Student</th>
+                    <th>Phone</th>
+                    <th>Class</th>
+                    <th>Follow-Up</th>
+                    <th>Status</th>
+                    <th class="actions-col text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer border-top-0 px-4 py-3">
+            <small class="text-muted" id="tableSummary">No enquiries yet.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <footer class="app-footer mt-4">
+    <div class="content-wrapper mx-auto text-center" style="max-width:95vw;">
+      <small>
+        Looking for complete School CRM Automation? <strong>EduGenz</strong> can help.
+        &nbsp;📞 9038443321 | ✉️ sstechinnovators@gmail.com
+      </small>
+    </div>
+  </footer>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast"
+         class="toast align-items-center text-bg-success border-0"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          Saved Successfully
+        </div>
+        <button type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast">
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
